@@ -38,6 +38,7 @@ class AuthController
         // Carrega a tela de login.
         require __DIR__ . '/../Views/auth/login.php';
     }
+
     public function entrar(): void
     {
         // Permite executar o login somente por requisição POST.
@@ -68,9 +69,9 @@ class AuthController
 
         // Busca o usuário pelo e-mail.
         $sql = 'SELECT id, nome, email, senha, perfil, status
-            FROM usuarios
-            WHERE email = :email
-            LIMIT 1';
+                FROM usuarios
+                WHERE email = :email
+                LIMIT 1';
 
         // Prepara a consulta para evitar SQL Injection.
         $stmt = $this->pdo->prepare($sql);
@@ -80,6 +81,7 @@ class AuthController
 
         // Executa a consulta.
         $stmt->execute();
+
         // Recupera o usuário encontrado.
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -122,6 +124,7 @@ class AuthController
         // Carrega a página interna.
         require __DIR__ . '/../Views/dashboard/index.php';
     }
+
     public function logout(): void
     {
         // Remove os dados armazenados na sessão.
