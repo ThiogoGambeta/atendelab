@@ -24,7 +24,6 @@ class PessoasController
         $sql = 'SELECT id, nome, documento, telefone, email, curso, periodo, status, observacoes, criado_em, atualizado_em
                 FROM pessoas
                 ORDER BY id DESC';
-
         $stmt = $this->pdo->query($sql);
         $pessoas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

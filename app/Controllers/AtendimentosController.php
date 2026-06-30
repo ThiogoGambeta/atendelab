@@ -158,8 +158,16 @@ class AtendimentosController
                 'protocolo' => 'ATD-' . str_pad((string) $id, 4, '0', STR_PAD_LEFT)
             ], 201);
         } catch (PDOException $e) {
-            $this->responder(['erro' => 'Erro ao cadastrar atendimento.'], 500);
-        }
+    http_response_code(500);
+    header('Content-Type: application/json; charset=utf-8');
+
+    echo json_encode([
+        'erro' => 'Erro ao cadastrar atendimento.',
+        'detalhe' => $e->getMessage()
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
     }
 
     public function alterarStatus(): void

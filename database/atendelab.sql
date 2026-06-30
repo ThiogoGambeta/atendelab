@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: May 28, 2026 at 12:52 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: 127.0.0.1:3307
+-- Tempo de geração: 30/06/2026 às 21:31
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `atendelab`
+-- Banco de dados: `atendelab`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `atendimentos`
+-- Estrutura para tabela `atendimentos`
 --
 
 CREATE TABLE `atendimentos` (
@@ -33,17 +33,25 @@ CREATE TABLE `atendimentos` (
   `tipo_atendimento_id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
   `data_atendimento` date DEFAULT NULL,
-  `hora_atendimento` time DEFAULT NULL,
+  `horario_atendimento` time DEFAULT NULL,
   `descricao` text DEFAULT NULL,
-  `observacao` text DEFAULT NULL,
+  `observacao_final` text DEFAULT NULL,
   `status` enum('aberto','em_andamento','concluido') DEFAULT 'aberto',
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `atendimentos`
+--
+
+INSERT INTO `atendimentos` (`id`, `pessoa_id`, `tipo_atendimento_id`, `usuario_id`, `data_atendimento`, `horario_atendimento`, `descricao`, `observacao_final`, `status`, `criado_em`, `atualizado_em`) VALUES
+(1, 1, 2, 1, '2026-06-07', '14:30:00', 'Orientação sobre atividade avaliativa.', 'Atendimento concluído.', 'concluido', '2026-06-30 16:38:31', '2026-06-30 16:44:51');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pessoas`
+-- Estrutura para tabela `pessoas`
 --
 
 CREATE TABLE `pessoas` (
@@ -51,28 +59,50 @@ CREATE TABLE `pessoas` (
   `nome` varchar(100) NOT NULL,
   `documento` varchar(20) DEFAULT NULL,
   `telefone` varchar(20) DEFAULT NULL,
+  `email` varchar(150) DEFAULT NULL,
   `curso` varchar(100) DEFAULT NULL,
   `periodo` varchar(100) DEFAULT NULL,
-  `status` enum('ativo','inativo') DEFAULT 'ativo'
+  `observacoes` text DEFAULT NULL,
+  `status` enum('ativo','inativo') DEFAULT 'ativo',
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `pessoas`
+--
+
+INSERT INTO `pessoas` (`id`, `nome`, `documento`, `telefone`, `email`, `curso`, `periodo`, `observacoes`, `status`, `criado_em`, `atualizado_em`) VALUES
+(1, 'Maria Atualizado', '111.222.333-44', '47999992345', 'maria.souza@example.com', 'Engenharia de Software', '5', 'Cadastro utilizado durante a Aula 04', 'ativo', '2026-06-30 14:30:57', '2026-06-30 16:23:42'),
+(3, 'Gabriel Teste Editar', '12345677899', '47984032004', 'teste@teste.com', 'Eng Soft', '6', 'TESTE', 'ativo', '2026-06-30 17:48:55', '2026-06-30 17:49:24');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tipos_atendimentos`
+-- Estrutura para tabela `tipos_atendimentos`
 --
 
 CREATE TABLE `tipos_atendimentos` (
   `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` text DEFAULT NULL,
-  `status` enum('ativo','inativo') DEFAULT 'ativo'
+  `status` enum('ativo','inativo') DEFAULT 'ativo',
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `tipos_atendimentos`
+--
+
+INSERT INTO `tipos_atendimentos` (`id`, `nome`, `descricao`, `status`, `criado_em`, `atualizado_em`) VALUES
+(1, 'Orientação de projeto Atualizado', 'Orientações acadêmicas sobre projetos integradores. Atualizado', 'ativo', '2026-06-30 16:20:29', '2026-06-30 17:57:09'),
+(2, 'Teste', 'Teste', 'ativo', '2026-06-30 16:23:14', '2026-06-30 17:57:33');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estrutura para tabela `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -86,18 +116,18 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `usuarios`
+-- Despejando dados para a tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `perfil`, `status`, `criado_em`) VALUES
-(1, 'Administrador', 'admin@atendelab.com', '$2y$10$J9P2kU2BAMZ3TZcuxTsW4e1D/lka8EocYHzvyoOZmCNcWDQz3RuVC', 'admin', 'ativo', '2026-05-26 23:08:44');
+(1, 'Administrador', 'admin@atendelab.com', '$2y$10$mc6zuGd6fLl2u9yHZrAc7ux4WFQH65t5a3RB9SLDnslT4Jz/iJRhm', 'admin', 'ativo', '2026-05-26 23:08:44');
 
 --
--- Indexes for dumped tables
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `atendimentos`
+-- Índices de tabela `atendimentos`
 --
 ALTER TABLE `atendimentos`
   ADD PRIMARY KEY (`id`),
@@ -106,59 +136,59 @@ ALTER TABLE `atendimentos`
   ADD KEY `usuario_id` (`usuario_id`);
 
 --
--- Indexes for table `pessoas`
+-- Índices de tabela `pessoas`
 --
 ALTER TABLE `pessoas`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `documento` (`documento`);
 
 --
--- Indexes for table `tipos_atendimentos`
+-- Índices de tabela `tipos_atendimentos`
 --
 ALTER TABLE `tipos_atendimentos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `usuarios`
+-- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `atendimentos`
+-- AUTO_INCREMENT de tabela `atendimentos`
 --
 ALTER TABLE `atendimentos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `pessoas`
+-- AUTO_INCREMENT de tabela `pessoas`
 --
 ALTER TABLE `pessoas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `tipos_atendimentos`
+-- AUTO_INCREMENT de tabela `tipos_atendimentos`
 --
 ALTER TABLE `tipos_atendimentos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- Constraints for dumped tables
+-- Restrições para tabelas despejadas
 --
 
 --
--- Constraints for table `atendimentos`
+-- Restrições para tabelas `atendimentos`
 --
 ALTER TABLE `atendimentos`
   ADD CONSTRAINT `atendimentos_ibfk_1` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoas` (`id`),
